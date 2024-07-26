@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepTechTools - Growing in Stealth</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #34495e;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        #plant {
+            width: 200px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DeepTechTools</h1>
+        <p>Growing in stealth. Coming soon.</p>
+        <svg id="plant" viewBox="0 0 100 100">
+            <path id="stem" d="M50 100 Q50 50 50 30" stroke="green" stroke-width="2" fill="none"/>
+            <path id="leaf1" d="M50 60 Q60 50 50 40" stroke="green" stroke-width="2" fill="none"/>
+            <path id="leaf2" d="M50 50 Q40 40 50 30" stroke="green" stroke-width="2" fill="none"/>
+            <path id="leaf3" d="M50 40 Q60 30 50 20" stroke="green" stroke-width="2" fill="none" opacity="0"/>
+            <path id="leaf4" d="M50 30 Q40 20 50 10" stroke="green" stroke-width="2" fill="none" opacity="0"/>
+        </svg>
+    </div>
 
+    <script>
+        function animatePlant() {
+            const stem = document.getElementById('stem');
+            const leaves = [
+                document.getElementById('leaf1'),
+                document.getElementById('leaf2'),
+                document.getElementById('leaf3'),
+                document.getElementById('leaf4')
+            ];
+            
+            let t = 0;
+            let growth = 0;
+            
+            function animate() {
+                t += 0.02;
+                growth = Math.min(1, growth + 0.001);  // Slowly increase growth
+                
+                const y = Math.sin(t) * 5;
+                const stemHeight = 70 - growth * 40;  // Stem grows upwards
+                
+                stem.setAttribute('d', `M50 100 Q50 ${75 + y} 50 ${stemHeight}`);
+                
+                leaves.forEach((leaf, index) => {
+                    const leafY = 100 - (index + 1) * 20 * growth;
+                    const leafX = 50 + (index % 2 === 0 ? 10 : -10);
+                    const leafEndY = leafY - 20;
+                    const waveOffset = Math.sin(t + index) * 5;
+                    
+                    leaf.setAttribute('d', `M50 ${leafY} Q${leafX + waveOffset} ${(leafY + leafEndY) / 2} 50 ${leafEndY}`);
+                    leaf.setAttribute('opacity', Math.min(1, growth * 4 - index));
+                    
+                    // Subtle color change
+                    const green = Math.floor(100 + growth * 100);
+                    leaf.setAttribute('stroke', `rgb(0, ${green}, 0)`);
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+        
+        animatePlant();
+    </script>
+</body>
+</html>
